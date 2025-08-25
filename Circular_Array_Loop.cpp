@@ -64,4 +64,61 @@ public:
     }
 };
 
+//
+//equivalent java code
+//
+
+
+import java.util.*;
+
+class Solution {
+    private int getNext(int current, int[] nums) {
+        int n = nums.length;
+        return ((current + nums[current]) % n + n) % n;
+    }
+
+    public boolean circularArrayLoop(int[] nums) {
+        int n = nums.length;
+        for (int i = 0; i < n; ++i) {
+            // Skip if already visited
+            if (nums[i] == 0) {
+                continue;
+            }
+
+            int slow = i;
+            int fast = i;
+            boolean direction = nums[i] > 0; // True for positive, False for negative
+
+            while (true) {
+                // Move slow pointer
+                slow = getNext(slow, nums);
+                if ((nums[slow] > 0) != direction) break; // Direction change
+                
+                // Move fast pointer
+                fast = getNext(fast, nums);
+                if ((nums[fast] > 0) != direction) break; // Direction change
+                fast = getNext(fast, nums);
+                if ((nums[fast] > 0) != direction) break; // Direction change
+
+                if (slow == getNext(slow, nums)) {
+                    break;
+                }
+
+                if (slow == fast) {
+                    return true;
+                }
+            }
+
+            int current = i;
+            while (nums[current] != 0 && (nums[current] > 0) == direction) {
+                int next = getNext(current, nums);
+                nums[current] = 0;
+                current = next;
+            }
+        }
+        return false;
+    }
+}
+
+
  
